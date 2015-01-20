@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="config_serverUri">http://www.helloworld.com/helloworld_locations.json</string>
+</resources>
