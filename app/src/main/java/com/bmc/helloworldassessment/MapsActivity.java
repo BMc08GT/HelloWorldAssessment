@@ -1,5 +1,6 @@
 package com.bmc.helloworldassessment;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.model.adapter.OfficeSummaryAdapter;
@@ -25,6 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 
@@ -159,6 +164,7 @@ public class MapsActivity extends ActionBarActivity
         }
     }
 
+    @SuppressLint("InflateParams")
     private void setUpMap() {
         // TODO: Add possible marker onClick handling to navigate to location detail page as well
 
@@ -175,6 +181,37 @@ public class MapsActivity extends ActionBarActivity
 
             // Add the marker to the map
             mMap.addMarker(marker);
+
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    View view = getLayoutInflater().inflate(R.layout.map_info_window, null);
+                    final ImageView image = (ImageView) view.findViewById(R.id.office_image);
+                    final TextView name = (TextView) view.findViewById(R.id.name);
+                    int index = getLocationIndex(marker.getTitle());
+                    if (index != -1) {
+                        image.setImageDrawable(Utils.urlToDrawable(MapsActivity.this,
+                                locations.get(index).getImageUrl()));
+                        name.setText(locations.get(index).getName());
+                    }
+
+                    return view;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+                    return null;
+                }
+
+                public int getLocationIndex(String title) {
+                    for (int i = 0; i < locations.size(); i++) {
+                        if (locations.get(i).getName().equals(title)) {
+                            return i;
+                        }
+                    }
+                    return -1;
+                }
+            });
         }
     }
 

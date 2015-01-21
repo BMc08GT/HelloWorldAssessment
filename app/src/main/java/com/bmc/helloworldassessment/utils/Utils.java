@@ -58,7 +58,7 @@ public class Utils {
         return Double.parseDouble(df.format(earthRadius * c));
     }
 
-    public static Drawable urlToDrawable(Context context, String imageUrl, IconGenerator icon) {
+    public static Drawable urlToDrawable(Context context, String imageUrl) {
         try {
             return new BitmapDrawable(Ion.with(context).load(imageUrl).asBitmap().get());
         } catch (InterruptedException | ExecutionException e) {
