@@ -1,0 +1,32 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/map"
+        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        layout="@layout/map_detail_fragment" />
+
+    <TextView
+        android:id="@+id/header"
+        style="@style/SettingsPageSummary"
+        android:text="@string/office_details_title" />
+
+    <View style="@style/Divider"
+        android:id="@+id/response_divider"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
+
+    <!-- <android.support.v7.widget.RecyclerView
+        android:id="@+id/office_summaries_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" /> -->
+
+
+
+</LinearLayout>

@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.bmc.helloworldassessment.misc.Location;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.maps.android.ui.IconGenerator;
@@ -22,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class Utils {
@@ -65,5 +67,14 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static int getLocationIndex(String title, ArrayList<Location> locations) {
+        for (int i = 0; i < locations.size(); i++) {
+            if (locations.get(i).getName().equals(title)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

@@ -1,6 +1,9 @@
 package com.bmc.helloworldassessment.model.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,21 +11,30 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bmc.helloworldassessment.R;
+import com.bmc.helloworldassessment.activity.MapsActivity;
+import com.bmc.helloworldassessment.activity.OfficeDetailsActivity;
+import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.model.OfficeSummary;
+import com.bmc.helloworldassessment.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdapter.ViewHolder> {
     private List<OfficeSummary> offices;
-    private int rowlayout;
+    private ArrayList<Location> locations;
+    private int rowlayout;;
+    private Context mContext;
     private boolean locationFound;
 
-    public OfficeSummaryAdapter(List<OfficeSummary> offices, int rowlayout, boolean found) {
+    public OfficeSummaryAdapter(List<OfficeSummary> offices, int rowlayout, Context context, boolean found, ArrayList<Location> locations) {
         this.offices = offices;
         this.rowlayout = rowlayout;
+        this.mContext = context;
         this.locationFound = found;
+        this.locations = locations;
     }
 
     @Override
@@ -62,19 +74,39 @@ public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdap
         Collections.sort(offices, distanceComparator);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView officeName;
         public TextView officeAddress;
         public TextView distanceToOffice;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            // TODO: Handle onClick to navigate to a detail view activity for the location
+
             officeName = (TextView) itemView.findViewById(R.id.office_name);
             officeAddress = (TextView) itemView.findViewById(R.id.office_address);
             distanceToOffice = (TextView) itemView.findViewById(R.id.distance);
+
+            // Set all aspects of the viewHolder to listen for clicks
+            itemView.setOnClickListener(this);
+            officeName.setOnClickListener(this);
+            officeAddress.setOnClickListener(this);
+            distanceToOffice.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            Location location = locations.get(getPosition());
+
+            Intent detailsIntent = new Intent(mContext, OfficeDetailsActivity.class);
+
+            // Create a bundle to pass to OfficeDetailsActivity and add it to the intent
+            Bundle extras = new Bundle();
+            extras.putSerializable(OfficeDetailsActivity.EXTRA_LOCATION, location);
+            detailsIntent.putExtras(extras);
+
+            // Start the office details activity
+            mContext.startActivity(detailsIntent);
+        }
     }
 
 }

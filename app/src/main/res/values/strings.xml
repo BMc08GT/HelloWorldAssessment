@@ -5,5 +5,6 @@
     <string name="title_activity_maps">HelloWorld</string>
     <string name="office_locations_title">Office locations</string>
     <string name="info_window_image_description">Map InfoWindow image content description</string>
+    <string name="office_details_title">Office details</string>
 
 </resources>

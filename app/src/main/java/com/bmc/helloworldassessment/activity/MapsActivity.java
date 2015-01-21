@@ -1,21 +1,22 @@
-package com.bmc.helloworldassessment;
+package com.bmc.helloworldassessment.activity;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bmc.helloworldassessment.R;
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.model.adapter.OfficeSummaryAdapter;
 import com.bmc.helloworldassessment.model.manager.OfficeSummaryManager;
@@ -26,7 +27,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -100,13 +100,14 @@ public class MapsActivity extends ActionBarActivity
 
     private void addAdapter() {
         OfficeSummaryAdapter mAdapter = new OfficeSummaryAdapter(
-                OfficeSummaryManager.getInstance().getOfficeSummaries(locations, mLastLocation), R.layout.office_summary_item, mLastLocation != null);
+                OfficeSummaryManager.getInstance().getOfficeSummaries(locations, mLastLocation),
+                R.layout.office_summary_item, this, mLastLocation != null, locations);
+        mRecyclerView.setAdapter(mAdapter);
         if (mLastLocation != null) {
             // If we have a last location,
             // sort the list by distance from user to office
             mAdapter.sortByDistance();
         }
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void registerReceivers() {
@@ -117,16 +118,20 @@ public class MapsActivity extends ActionBarActivity
     @Override
     public void onPause() {
         super.onPause();
-        if (mReceiver != null) {
+        try {
             unregisterReceiver(mReceiver);
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "Unable to unregister receiver. Not registered?");
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mReceiver != null) {
+        try {
             unregisterReceiver(mReceiver);
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "Unable to unregister receiver. Not registered?");
         }
     }
 
@@ -166,8 +171,6 @@ public class MapsActivity extends ActionBarActivity
 
     @SuppressLint("InflateParams")
     private void setUpMap() {
-        // TODO: Add possible marker onClick handling to navigate to location detail page as well
-
         // Setup icon generator to create a marker using company color
         IconGenerator iconFactory = new IconGenerator(this);
         iconFactory.setColor(getResources().getColor(R.color.orange));
@@ -181,38 +184,30 @@ public class MapsActivity extends ActionBarActivity
 
             // Add the marker to the map
             mMap.addMarker(marker);
-
-            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                    View view = getLayoutInflater().inflate(R.layout.map_info_window, null);
-                    final ImageView image = (ImageView) view.findViewById(R.id.office_image);
-                    final TextView name = (TextView) view.findViewById(R.id.name);
-                    int index = getLocationIndex(marker.getTitle());
-                    if (index != -1) {
-                        image.setImageDrawable(Utils.urlToDrawable(MapsActivity.this,
-                                locations.get(index).getImageUrl()));
-                        name.setText(locations.get(index).getName());
-                    }
-
-                    return view;
-                }
-
-                @Override
-                public View getInfoContents(Marker marker) {
-                    return null;
-                }
-
-                public int getLocationIndex(String title) {
-                    for (int i = 0; i < locations.size(); i++) {
-                        if (locations.get(i).getName().equals(title)) {
-                            return i;
-                        }
-                    }
-                    return -1;
-                }
-            });
         }
+
+        // Set infoWindow adapter
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                View view = getLayoutInflater().inflate(R.layout.map_info_window, null);
+                final ImageView image = (ImageView) view.findViewById(R.id.office_image);
+                final TextView name = (TextView) view.findViewById(R.id.name);
+                int index = Utils.getLocationIndex(marker.getTitle(), locations);
+                if (index != -1) {
+                    image.setImageDrawable(Utils.urlToDrawable(MapsActivity.this,
+                            locations.get(index).getImageUrl()));
+                    name.setText(locations.get(index).getName());
+                }
+
+                return view;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null;
+            }
+        });
     }
 
     @Override

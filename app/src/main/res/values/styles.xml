@@ -46,6 +46,9 @@
     </style>
     <item name="divider" type="id">divider</item>
 
+    <style name="AppTheme.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="android:height">@dimen/details_bar_height</item>
+    </style>
 
 
 </resources>
