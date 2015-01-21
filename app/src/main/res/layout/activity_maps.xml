@@ -11,6 +11,16 @@
         android:layout_weight="1"
         layout="@layout/map_fragment" />
 
+    <TextView
+        android:id="@+id/header"
+        style="@style/SettingsPageSummary"
+        android:text="@string/office_locations_title" />
+
+    <View style="@style/Divider"
+        android:id="@+id/response_divider"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/office_summaries_list"
         android:layout_width="match_parent"

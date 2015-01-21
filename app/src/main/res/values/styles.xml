@@ -2,7 +2,50 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <!-- <item name="android:homeAsUpIndicator">@drawable/ic_up_arrow</item> -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/blue_dark</item>
+        <item name="colorAccent">@color/pewter</item>
     </style>
+
+    <style name="SettingsPageTitle">
+        <item name="android:id">@android:id/title</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/title_top_margin</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#424242</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
+
+    <style name="SettingsPageSummary">
+        <item name="android:id">@android:id/summary</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">#424242</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:id">@id/divider</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:background">?android:attr/dividerHorizontal</item>
+    </style>
+    <item name="divider" type="id">divider</item>
+
+
 
 </resources>

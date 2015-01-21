@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">HelloWorldAssessment</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">HelloWorld</string>
+    <string name="office_locations_title">Office locations</string>
 
 </resources>
