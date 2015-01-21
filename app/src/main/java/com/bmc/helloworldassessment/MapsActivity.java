@@ -8,10 +8,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.bmc.helloworldassessment.misc.Location;
+import com.bmc.helloworldassessment.model.adapter.OfficeSummaryAdapter;
+import com.bmc.helloworldassessment.model.manager.OfficeSummaryManager;
 import com.bmc.helloworldassessment.service.GetLocationsService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -21,12 +29,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = MapsActivity.class.getSimpleName()
-            ;
+    private static final String TAG = MapsActivity.class.getSimpleName();
+
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    ArrayList<Location> locations;
+    private GoogleApiClient mGoogleApiClient;
+    private ArrayList<Location> locations;
+    private double[] userLocation;
+    private android.location.Location mLastLocation;
+
+
+    private RecyclerView mRecyclerView;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -42,6 +57,8 @@ public class MapsActivity extends FragmentActivity {
                 for (Location location : locations) {
                     Log.d(TAG, "location name: " + location.getName());
                 }
+                addAdapter();
+
             }
         }
     };
@@ -55,9 +72,32 @@ public class MapsActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        buildGoogleApiClient();
         setUpMapIfNeeded();
+        setupRecyclerView();
         registerReceivers();
+    }
 
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    private void setupRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.office_summaries_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private void addAdapter() {
+        OfficeSummaryAdapter mAdapter = new OfficeSummaryAdapter(
+                OfficeSummaryManager.getInstance().getOfficeSummaries(locations, getUserLocation()), R.layout.office_summary_item, this);
+        mAdapter.sortByDistance();
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void registerReceivers() {
@@ -112,13 +152,33 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+    }
+
+    public double[] getUserLocation() {
+        if (mLastLocation != null) {
+            userLocation =  new double[2];
+            userLocation[0] = mLastLocation.getLatitude();
+            userLocation[1] = mLastLocation.getLongitude();
+        }
+        return userLocation;
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }

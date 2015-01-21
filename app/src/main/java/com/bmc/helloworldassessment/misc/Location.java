@@ -15,8 +15,8 @@ public class Location implements Parcelable, Serializable{
     private int zipCode;
     private String phone;
     private String fax;
-    private long latitude;
-    private long longitude;
+    private double latitude;
+    private double longitude;
     private String imageUrl;
 
     private Location() {
@@ -95,7 +95,7 @@ public class Location implements Parcelable, Serializable{
      * Get the latitude for this office's location
      * @return latitude
      */
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -103,7 +103,7 @@ public class Location implements Parcelable, Serializable{
      * Get the longitude for this office's location
      * @return longitude
      */
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -144,8 +144,8 @@ public class Location implements Parcelable, Serializable{
         out.writeInt(zipCode);
         out.writeString(phone);
         out.writeString(fax);
-        out.writeLong(latitude);
-        out.writeLong(longitude);
+        out.writeDouble(latitude);
+        out.writeDouble(longitude);
         out.writeString(imageUrl);
     }
 
@@ -158,8 +158,8 @@ public class Location implements Parcelable, Serializable{
         zipCode = in.readInt();
         phone = in.readString();
         fax = in.readString();
-        latitude = in.readLong();
-        longitude = in.readLong();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
         imageUrl = in.readString();
     }
 
@@ -172,8 +172,8 @@ public class Location implements Parcelable, Serializable{
         private int zipCode;
         private String phone;
         private String fax;
-        private long latitude;
-        private long longitude;
+        private double latitude;
+        private double longitude;
         private String imageUrl;
 
         public Builder setName(String officeName) {
@@ -216,12 +216,12 @@ public class Location implements Parcelable, Serializable{
             return this;
         }
 
-        public Builder setLatitude(long officeLatitude) {
+        public Builder setLatitude(double officeLatitude) {
             latitude = officeLatitude;
             return this;
         }
 
-        public Builder setLongitude(long officeLongitude) {
+        public Builder setLongitude(double officeLongitude) {
             longitude = officeLongitude;
             return this;
         }

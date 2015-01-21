@@ -155,8 +155,8 @@ public class GetLocationsService extends IntentService {
                 .setZipCode(item.getInt("zip_postal_code"))
                 .setPhoneNumber(item.getString("phone"))
                 .setFaxNumber(item.getString("fax"))
-                .setLatitude(item.getLong("latitude"))
-                .setLongitude(item.getLong("longitude"))
+                .setLatitude(item.getDouble("latitude"))
+                .setLongitude(item.getDouble("longitude"))
                 .setImage(item.getString("office_image"))
                 .build();
     }
