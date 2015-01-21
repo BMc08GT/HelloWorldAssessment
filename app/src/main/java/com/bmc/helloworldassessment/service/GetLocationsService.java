@@ -135,6 +135,7 @@ public class GetLocationsService extends IntentService {
                     JSONObject item = locationList.getJSONObject(i);
                     Location location = parseLocationJSONObject(item);
                     if (location != null) {
+                        // TODO: Store locations for offline retrieval
                         locations.add(location);
                     }
                 }

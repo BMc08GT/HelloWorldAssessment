@@ -67,6 +67,7 @@ public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdap
 
         public ViewHolder(View itemView) {
             super(itemView);
+            // TODO: Handle onClick to navigate to a detail view activity for the location
             officeName = (TextView) itemView.findViewById(R.id.office_name);
             officeAddress = (TextView) itemView.findViewById(R.id.office_address);
             distanceToOffice = (TextView) itemView.findViewById(R.id.distance);

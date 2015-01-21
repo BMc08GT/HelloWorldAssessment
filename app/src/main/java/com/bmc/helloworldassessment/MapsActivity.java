@@ -157,6 +157,7 @@ public class MapsActivity extends ActionBarActivity
     }
 
     private void setUpMap() {
+        // TODO: Add possible marker onClick handling to navigate to location detail page as well
         for (Location location : locations) {
             mMap.addMarker(new MarkerOptions().position(
                     new LatLng(location.getLatitude(), location.getLongitude())).title(location.getName()));
