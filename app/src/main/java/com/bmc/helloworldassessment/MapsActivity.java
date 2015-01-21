@@ -108,13 +108,17 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(mReceiver);
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mReceiver);
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
     }
 
     private void startLocationService() {
