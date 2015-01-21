@@ -4,9 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,17 +16,19 @@ import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.model.adapter.OfficeSummaryAdapter;
 import com.bmc.helloworldassessment.model.manager.OfficeSummaryManager;
 import com.bmc.helloworldassessment.service.GetLocationsService;
+import com.bmc.helloworldassessment.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class MapsActivity extends ActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -161,9 +161,20 @@ public class MapsActivity extends ActionBarActivity
 
     private void setUpMap() {
         // TODO: Add possible marker onClick handling to navigate to location detail page as well
+
+        // Setup icon generator to create a marker using company color
+        IconGenerator iconFactory = new IconGenerator(this);
+        iconFactory.setColor(getResources().getColor(R.color.orange));
+
         for (Location location : locations) {
-            mMap.addMarker(new MarkerOptions().position(
-                    new LatLng(location.getLatitude(), location.getLongitude())).title(location.getName()));
+            // Create marker option
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(new LatLng(location.getLatitude(), location.getLongitude()));
+            marker.title(location.getName());
+            marker.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon()));
+
+            // Add the marker to the map
+            mMap.addMarker(marker);
         }
     }
 

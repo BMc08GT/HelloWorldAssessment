@@ -3,16 +3,30 @@ package com.bmc.helloworldassessment.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.maps.android.ui.IconGenerator;
+import com.koushikdutta.ion.Ion;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.concurrent.ExecutionException;
 
-/**
- * Created by bmc on 1/20/15.
- */
 public class Utils {
 
+    private static final String TAG = Utils.class.getSimpleName();
 
     public static String getUserAgentString(Context context) {
         try {
@@ -42,5 +56,14 @@ public class Utils {
 
         DecimalFormat df = new DecimalFormat("###.##");
         return Double.parseDouble(df.format(earthRadius * c));
+    }
+
+    public static Drawable urlToDrawable(Context context, String imageUrl, IconGenerator icon) {
+        try {
+            return new BitmapDrawable(Ion.with(context).load(imageUrl).asBitmap().get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

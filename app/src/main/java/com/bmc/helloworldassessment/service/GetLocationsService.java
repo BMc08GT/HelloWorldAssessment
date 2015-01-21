@@ -158,7 +158,7 @@ public class GetLocationsService extends IntentService {
                 .setFaxNumber(item.getString("fax"))
                 .setLatitude(item.getDouble("latitude"))
                 .setLongitude(item.getDouble("longitude"))
-                .setImage(item.getString("office_image"))
+                .setImageUrl(item.getString("office_image"))
                 .build();
     }
 

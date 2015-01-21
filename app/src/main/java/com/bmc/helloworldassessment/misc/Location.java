@@ -226,7 +226,7 @@ public class Location implements Parcelable, Serializable{
             return this;
         }
 
-        public Builder setImage(String officeImage) {
+        public Builder setImageUrl(String officeImage) {
             imageUrl = officeImage;
             return this;
         }
