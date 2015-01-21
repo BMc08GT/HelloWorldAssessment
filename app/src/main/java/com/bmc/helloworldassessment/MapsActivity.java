@@ -38,7 +38,6 @@ public class MapsActivity extends ActionBarActivity
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private GoogleApiClient mGoogleApiClient;
     private ArrayList<Location> locations;
-    private double[] userLocation;
     private android.location.Location mLastLocation;
 
 
@@ -96,8 +95,12 @@ public class MapsActivity extends ActionBarActivity
 
     private void addAdapter() {
         OfficeSummaryAdapter mAdapter = new OfficeSummaryAdapter(
-                OfficeSummaryManager.getInstance().getOfficeSummaries(locations, getUserLocation()), R.layout.office_summary_item, this);
-        mAdapter.sortByDistance();
+                OfficeSummaryManager.getInstance().getOfficeSummaries(locations, mLastLocation), R.layout.office_summary_item, mLastLocation != null);
+        if (mLastLocation != null) {
+            // If we have a last location,
+            // sort the list by distance from user to office
+            mAdapter.sortByDistance();
+        }
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -162,15 +165,6 @@ public class MapsActivity extends ActionBarActivity
             mMap.addMarker(new MarkerOptions().position(
                     new LatLng(location.getLatitude(), location.getLongitude())).title(location.getName()));
         }
-    }
-
-    public double[] getUserLocation() {
-        if (mLastLocation != null) {
-            userLocation =  new double[2];
-            userLocation[0] = mLastLocation.getLatitude();
-            userLocation[1] = mLastLocation.getLongitude();
-        }
-        return userLocation;
     }
 
     @Override

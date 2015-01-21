@@ -19,7 +19,7 @@ public class OfficeSummaryManager {
     }
 
     public List<OfficeSummary> getOfficeSummaries(
-            ArrayList<Location> locations, double[] indices) {
+            ArrayList<Location> locations, android.location.Location position) {
         if (offices == null) {
             offices = new ArrayList<>();
 
@@ -35,9 +35,9 @@ public class OfficeSummaryManager {
                         locations.get(i).getState(),
                         locations.get(i).getZipCode());
                 // If user location was pinpointed, show distance to office
-                if (indices != null) {
+                if (position != null) {
                     office.distanceToOffice = Utils.distanceBetween(
-                            indices[0], indices[1],
+                            position.getLatitude(), position.getLongitude(),
                             locations.get(i).getLatitude(), locations.get(i).getLongitude());
                 }
 

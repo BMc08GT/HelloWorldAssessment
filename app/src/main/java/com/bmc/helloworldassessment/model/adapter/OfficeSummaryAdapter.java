@@ -10,23 +10,19 @@ import android.widget.TextView;
 import com.bmc.helloworldassessment.R;
 import com.bmc.helloworldassessment.model.OfficeSummary;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by bmc on 1/20/15.
- */
 public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdapter.ViewHolder> {
     private List<OfficeSummary> offices;
     private int rowlayout;
-    private Context context;
+    private boolean locationFound;
 
-    public OfficeSummaryAdapter(List<OfficeSummary> offices, int rowlayout, Context context) {
+    public OfficeSummaryAdapter(List<OfficeSummary> offices, int rowlayout, boolean found) {
         this.offices = offices;
         this.rowlayout = rowlayout;
-        this.context = context;
+        this.locationFound = found;
     }
 
     @Override
@@ -40,7 +36,13 @@ public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdap
         OfficeSummary office = offices.get(i);
         viewHolder.officeName.setText(office.officeName);
         viewHolder.officeAddress.setText(office.officeAddress);
-        viewHolder.distanceToOffice.setText(office.distanceToOffice + " miles away");
+        // if a location has been found, set the text with the distance to office
+        // otherwise set the view's visibility to GONE
+        if (locationFound) {
+            viewHolder.distanceToOffice.setText(office.distanceToOffice + " miles away");
+        } else {
+            viewHolder.distanceToOffice.setVisibility(View.GONE);
+        }
     }
 
     @Override
