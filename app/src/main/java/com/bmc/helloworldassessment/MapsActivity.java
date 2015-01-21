@@ -58,7 +58,7 @@ public class MapsActivity extends FragmentActivity
                     Log.d(TAG, "location name: " + location.getName());
                 }
                 addAdapter();
-
+                setUpMap();
             }
         }
     };
@@ -147,13 +147,15 @@ public class MapsActivity extends FragmentActivity
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 startLocationService();
-                setUpMap();
             }
         }
     }
 
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        for (Location location : locations) {
+            mMap.addMarker(new MarkerOptions().position(
+                    new LatLng(location.getLatitude(), location.getLongitude())).title(location.getName()));
+        }
     }
 
     public double[] getUserLocation() {
