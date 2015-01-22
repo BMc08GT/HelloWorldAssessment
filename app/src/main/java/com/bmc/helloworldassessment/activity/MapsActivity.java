@@ -6,16 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bmc.helloworldassessment.BaseActivity;
 import com.bmc.helloworldassessment.R;
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.model.adapter.OfficeSummaryAdapter;
@@ -35,7 +34,7 @@ import com.google.maps.android.ui.IconGenerator;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends ActionBarActivity
+public class MapsActivity extends BaseActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
@@ -69,9 +68,18 @@ public class MapsActivity extends ActionBarActivity
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    public int getLayoutResource() {
+        return R.layout.activity_maps;
+    }
+
+    @Override
+    public int getTitleResource() {
+        return R.string.title_activity_maps;
+    }
+
+    @Override
+    public boolean getHomeAsUpNavigation() {
+        return false;
     }
 
     @Override

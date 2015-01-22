@@ -2,8 +2,8 @@ package com.bmc.helloworldassessment.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 
+import com.bmc.helloworldassessment.BaseActivity;
 import com.bmc.helloworldassessment.R;
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.utils.Utils;
@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.manuelpeinado.fadingactionbar.view.OnScrollChangedCallback;
 
-public class OfficeDetailsActivity extends ActionBarActivity implements OnScrollChangedCallback {
+public class OfficeDetailsActivity extends BaseActivity implements OnScrollChangedCallback {
 
     private static final String TAG = OfficeDetailsActivity.class.getSimpleName();
 
@@ -26,29 +26,40 @@ public class OfficeDetailsActivity extends ActionBarActivity implements OnScroll
     private Location mOfficeLocation;
 
     @Override
+    public int getLayoutResource() {
+        return R.layout.activity_details;
+    }
+
+    @Override
+    public int getTitleResource() {
+        // Set title to title_activity_maps here and override the title in onCreate/onResume
+        // using mLocation.getName()
+        return R.string.title_activity_maps;
+    }
+
+    @Override
+    public boolean getHomeAsUpNavigation() {
+        return true;
+    }
+
+    public void getLocationDetails() {
+        Bundle extras = getIntent().getExtras();
+        mOfficeLocation = (Location) extras.getSerializable(EXTRA_LOCATION);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
+        getLocationDetails();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        Bundle extras = getIntent().getExtras();
-        mOfficeLocation = (Location) extras.getSerializable(EXTRA_LOCATION);
-
-        initActionBar();
-
-        setUpMapIfNeeded();
-    }
-
-    private void initActionBar() {
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mOfficeLocation.getName());
         getSupportActionBar().setBackgroundDrawable(
                 Utils.urlToDrawable(this, mOfficeLocation.getImageUrl()));
+        setUpMapIfNeeded();
     }
 
     /**
@@ -103,6 +114,6 @@ public class OfficeDetailsActivity extends ActionBarActivity implements OnScroll
 
     @Override
     public void onScroll(int i, int i2) {
-        
+
     }
 }
