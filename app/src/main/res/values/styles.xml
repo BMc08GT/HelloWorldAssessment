@@ -1,8 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- <item name="android:homeAsUpIndicator">@drawable/ic_up_arrow</item> -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="android:fitsSystemWindows">true</item>
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">@color/blue_dark</item>
         <item name="colorAccent">@color/pewter</item>
@@ -45,10 +46,4 @@
         <item name="android:background">?android:attr/dividerHorizontal</item>
     </style>
     <item name="divider" type="id">divider</item>
-
-    <style name="AppTheme.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
-        <item name="android:height">@dimen/details_bar_height</item>
-    </style>
-
-
 </resources>

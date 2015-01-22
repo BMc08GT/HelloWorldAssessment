@@ -10,9 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bmc.helloworldassessment.BaseActivity;
 import com.bmc.helloworldassessment.R;
@@ -20,7 +17,6 @@ import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.model.adapter.OfficeSummaryAdapter;
 import com.bmc.helloworldassessment.model.manager.OfficeSummaryManager;
 import com.bmc.helloworldassessment.service.GetLocationsService;
-import com.bmc.helloworldassessment.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -73,12 +69,12 @@ public class MapsActivity extends BaseActivity
     }
 
     @Override
-    public int getTitleResource() {
-        return R.string.title_activity_maps;
+    public String getTitleResource() {
+        return getString(R.string.title_activity_maps);
     }
 
     @Override
-    public boolean getHomeAsUpNavigation() {
+    public boolean setHomeAsUpEnabled() {
         return false;
     }
 
@@ -109,7 +105,7 @@ public class MapsActivity extends BaseActivity
     private void addAdapter() {
         OfficeSummaryAdapter mAdapter = new OfficeSummaryAdapter(
                 OfficeSummaryManager.getInstance().getOfficeSummaries(locations, mLastLocation),
-                R.layout.office_summary_item, this, mLastLocation != null, locations);
+                R.layout.office_summary_item, this, mLastLocation, locations);
         if (mLastLocation != null) {
             // If we have a last location,
             // sort the list by distance from user to office
@@ -195,26 +191,10 @@ public class MapsActivity extends BaseActivity
             mMap.addMarker(marker);
         }
 
-        // Set infoWindow adapter
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoWindow(Marker marker) {
-                View view = getLayoutInflater().inflate(R.layout.map_info_window, null);
-                final ImageView image = (ImageView) view.findViewById(R.id.office_image);
-                final TextView name = (TextView) view.findViewById(R.id.name);
-                int index = Utils.getLocationIndex(marker.getTitle(), locations);
-                if (index != -1) {
-                    image.setImageDrawable(Utils.urlToDrawable(MapsActivity.this,
-                            locations.get(index).getImageUrl()));
-                    name.setText(locations.get(index).getName());
-                }
-
-                return view;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                return null;
+        // Disable marker clickevent to hide the button presence in btm right
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            public boolean onMarkerClick(Marker arg0) {
+                return true;
             }
         });
     }

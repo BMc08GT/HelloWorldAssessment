@@ -25,13 +25,15 @@ public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdap
     private ArrayList<Location> locations;
     private int rowlayout;;
     private Context mContext;
-    private boolean locationFound;
+    private android.location.Location userLocation;
 
-    public OfficeSummaryAdapter(List<OfficeSummary> offices, int rowlayout, Context context, boolean found, ArrayList<Location> locations) {
+    public OfficeSummaryAdapter(
+            List<OfficeSummary> offices, int rowlayout, Context context,
+            android.location.Location userLocation, ArrayList<Location> locations) {
         this.offices = offices;
         this.rowlayout = rowlayout;
         this.mContext = context;
-        this.locationFound = found;
+        this.userLocation = userLocation;
         this.locations = locations;
     }
 
@@ -48,7 +50,7 @@ public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdap
         viewHolder.officeAddress.setText(office.officeAddress);
         // if a location has been found, set the text with the distance to office
         // otherwise set the view's visibility to GONE
-        if (locationFound) {
+        if (userLocation != null) {
             viewHolder.distanceToOffice.setText(office.distanceToOffice + " miles away");
         } else {
             viewHolder.distanceToOffice.setVisibility(View.GONE);
@@ -101,6 +103,7 @@ public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdap
             // Create a bundle to pass to OfficeDetailsActivity and add it to the intent
             Bundle extras = new Bundle();
             extras.putSerializable(OfficeDetailsActivity.EXTRA_LOCATION, location);
+            extras.putParcelable(OfficeDetailsActivity.EXTRA_LAST_LOCATION, userLocation);
             detailsIntent.putExtras(extras);
 
             // Start the office details activity

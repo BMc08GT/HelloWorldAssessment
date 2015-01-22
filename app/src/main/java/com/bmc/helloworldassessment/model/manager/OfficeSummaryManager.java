@@ -28,7 +28,7 @@ public class OfficeSummaryManager {
             for (int i = 0; i < numberOfOffices; i++) {
                 OfficeSummary office = new OfficeSummary();
                 office.officeName = locations.get(i).getName();
-                office.officeAddress = constructAddress(
+                office.officeAddress = Utils.constructAddress(
                         locations.get(i).getAddress(),
                         locations.get(i).getAddress2(),
                         locations.get(i).getCity(),
@@ -45,13 +45,5 @@ public class OfficeSummaryManager {
             }
         }
         return offices;
-    }
-
-    public String constructAddress(
-            String address1, String address2, String city, String state, int zipCode) {
-
-        return address1 + "\n" +
-                (address2 == null || address2.isEmpty() ? "" : address2 + "\n") +
-                city + ", " + state + " " + zipCode;
     }
 }

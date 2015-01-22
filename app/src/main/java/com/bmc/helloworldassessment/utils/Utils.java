@@ -77,4 +77,12 @@ public class Utils {
         }
         return -1;
     }
+
+    public static String constructAddress(
+            String address1, String address2, String city, String state, int zipCode) {
+
+        return address1 + "\n" +
+                (address2 == null || address2.isEmpty() ? "" : address2 + "\n") +
+                city + ", " + state + " " + zipCode;
+    }
 }
