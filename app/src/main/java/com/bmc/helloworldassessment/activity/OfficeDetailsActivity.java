@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.ui.IconGenerator;
 
 public class OfficeDetailsActivity extends BaseActivity {
 
@@ -179,10 +178,6 @@ public class OfficeDetailsActivity extends BaseActivity {
 
     @SuppressLint("InflateParams")
     private void setUpMap() {
-        // Setup icon generator to create a marker using company color
-        IconGenerator iconFactory = new IconGenerator(this);
-        iconFactory.setColor(getResources().getColor(R.color.orange));
-
         // Create LatLng instance
         LatLng position = new LatLng(mOfficeLocation.getLatitude(), mOfficeLocation.getLongitude());
 
@@ -193,7 +188,7 @@ public class OfficeDetailsActivity extends BaseActivity {
         MarkerOptions marker = new MarkerOptions();
         marker.position(position);
         marker.title(mOfficeLocation.getName());
-        marker.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon()));
+        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker));
 
 
         // Add the marker to the map
