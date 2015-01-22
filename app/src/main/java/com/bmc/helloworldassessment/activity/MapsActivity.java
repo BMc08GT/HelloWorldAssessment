@@ -110,12 +110,13 @@ public class MapsActivity extends BaseActivity
         OfficeSummaryAdapter mAdapter = new OfficeSummaryAdapter(
                 OfficeSummaryManager.getInstance().getOfficeSummaries(locations, mLastLocation),
                 R.layout.office_summary_item, this, mLastLocation != null, locations);
-        mRecyclerView.setAdapter(mAdapter);
         if (mLastLocation != null) {
             // If we have a last location,
             // sort the list by distance from user to office
             mAdapter.sortByDistance();
+            mAdapter.notifyDataSetChanged();
         }
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void registerReceivers() {

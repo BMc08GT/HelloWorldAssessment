@@ -1,6 +1,5 @@
 package com.bmc.helloworldassessment.model.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bmc.helloworldassessment.R;
-import com.bmc.helloworldassessment.activity.MapsActivity;
 import com.bmc.helloworldassessment.activity.OfficeDetailsActivity;
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.model.OfficeSummary;
@@ -95,7 +93,8 @@ public class OfficeSummaryAdapter extends RecyclerView.Adapter<OfficeSummaryAdap
 
         @Override
         public void onClick(View v) {
-            Location location = locations.get(getPosition());
+            Location location = locations.get(
+                    Utils.getLocationIndex(officeName.getText().toString(), locations));
 
             Intent detailsIntent = new Intent(mContext, OfficeDetailsActivity.class);
 
