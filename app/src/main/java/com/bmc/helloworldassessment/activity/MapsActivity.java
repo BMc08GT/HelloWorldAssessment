@@ -127,6 +127,7 @@ public class MapsActivity extends BaseActivity
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "Unable to unregister receiver. Not registered?");
         }
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -137,6 +138,7 @@ public class MapsActivity extends BaseActivity
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "Unable to unregister receiver. Not registered?");
         }
+        mGoogleApiClient.disconnect();
     }
 
     private void startLocationService() {
