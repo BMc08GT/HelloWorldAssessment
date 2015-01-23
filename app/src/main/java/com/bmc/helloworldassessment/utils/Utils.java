@@ -4,24 +4,12 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.bmc.helloworldassessment.misc.Location;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.maps.android.ui.IconGenerator;
 import com.koushikdutta.ion.Ion;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -60,9 +48,9 @@ public class Utils {
         return Double.parseDouble(df.format(earthRadius * c));
     }
 
-    public static Drawable urlToDrawable(Context context, String imageUrl) {
+    public static Bitmap urlToBitmap(Context context, String imageUrl) {
         try {
-            return new BitmapDrawable(Ion.with(context).load(imageUrl).asBitmap().get());
+            return Ion.with(context).load(imageUrl).asBitmap().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
