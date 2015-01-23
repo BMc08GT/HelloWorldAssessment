@@ -1,8 +1,12 @@
 package com.bmc.helloworldassessment.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 
 import com.bmc.helloworldassessment.BaseActivity;
 import com.bmc.helloworldassessment.R;
+import com.bmc.helloworldassessment.misc.Constants;
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.utils.Utils;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -70,18 +75,43 @@ public class OfficeDetailsActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
+        setupToolbar();
+        setupCard();
+        setupFabs();
+        setUpMapIfNeeded();
+    }
+
+    private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setMinimumHeight(500);
-        Drawable mActionBarBackgroundDrawable = new BitmapDrawable(
-                getResources(), Utils.urlToBitmap(this, mOfficeLocation.getImageUrl()));
+
+        Bitmap bitmap = null;
+        Drawable mActionBarBackgroundDrawable;
+        if (!Utils.isConnected(this)) {
+            // attempt to retrieve the saved bitmap
+            SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+            String encodedBitmap = prefs.getString(mOfficeLocation.getName(), null);
+            if (encodedBitmap != null) {
+                bitmap = Utils.base64StringToBitmap(encodedBitmap);
+            }
+        } else {
+            // use Ion to fetch the bitmap from json url
+            bitmap = Utils.urlToBitmap(this, mOfficeLocation.getImageUrl());
+        }
+        // check if bitmap is available for use
+        // otherwise use a ColorDrawable
+        if (bitmap != null) {
+            mActionBarBackgroundDrawable = new BitmapDrawable(
+                    getResources(), bitmap);
+        } else {
+            mActionBarBackgroundDrawable = new ColorDrawable(R.color.blue);
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             toolbar.setBackground(mActionBarBackgroundDrawable);
         } else {
             toolbar.setBackgroundDrawable(mActionBarBackgroundDrawable);
         }
-        setupCard();
-        setupFabs();
-        setUpMapIfNeeded();
     }
 
     @SuppressLint("InflateParams")

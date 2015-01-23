@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Base64;
 
 import com.bmc.helloworldassessment.misc.Location;
 import com.koushikdutta.ion.Ion;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -72,5 +75,18 @@ public class Utils {
         return address1 + "\n" +
                 (address2 == null || address2.isEmpty() ? "" : address2 + "\n") +
                 city + ", " + state + " " + zipCode;
+    }
+
+    public static Bitmap base64StringToBitmap(String encoded) {
+        byte[] b = Base64.decode(encoded, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(b, 0, b.length);
+    }
+
+    public static String bitmapToBase64String(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 }
