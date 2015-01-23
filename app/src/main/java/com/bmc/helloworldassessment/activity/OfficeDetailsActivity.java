@@ -214,7 +214,6 @@ public class OfficeDetailsActivity extends BaseActivity implements NotifyScrollV
         mCallFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: verify if they want DIAL or CALL
                 Intent callOfficeIntent = new Intent(Intent.ACTION_DIAL);
                 callOfficeIntent.setData(Uri.parse("tel:" + mOfficeLocation.getPhone()));
                 callOfficeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
