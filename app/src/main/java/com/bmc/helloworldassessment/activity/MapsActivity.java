@@ -16,9 +16,8 @@ import com.bmc.helloworldassessment.R;
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.model.adapter.OfficeSummaryAdapter;
 import com.bmc.helloworldassessment.model.manager.OfficeSummaryManager;
-import com.bmc.helloworldassessment.service.GetImagesTask;
 import com.bmc.helloworldassessment.service.GetLocationsService;
-import com.bmc.helloworldassessment.utils.Utils;
+import com.bmc.helloworldassessment.service.StoreImagesTask;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -58,8 +57,9 @@ public class MapsActivity extends BaseActivity
                 for (Location location : locations) {
                     Log.d(TAG, "location name: " + location.getName());
                 }
-                GetImagesTask task = new GetImagesTask(MapsActivity.this);
-                task.execute(locations);
+                // Store images for offline
+                StoreImagesTask imageTask = new StoreImagesTask(MapsActivity.this);
+                imageTask.execute(locations);
 
                 addAdapter();
                 setUpMap();

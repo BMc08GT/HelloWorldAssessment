@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.bmc.helloworldassessment.misc.Constants;
 import com.bmc.helloworldassessment.misc.Location;
@@ -12,13 +11,13 @@ import com.bmc.helloworldassessment.utils.Utils;
 
 import java.util.ArrayList;
 
-public class GetImagesTask extends AsyncTask<ArrayList<Location>, Void, Void> {
+public class StoreImagesTask extends AsyncTask<ArrayList<Location>, Void, Void> {
 
-    private static final String TAG = GetImagesTask.class.getSimpleName();
+    private static final String TAG = StoreImagesTask.class.getSimpleName();
 
     private Context mContext;
 
-    public GetImagesTask(Context context) {
+    public StoreImagesTask(Context context) {
         mContext = context;
     }
 

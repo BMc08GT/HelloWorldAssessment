@@ -1,11 +1,14 @@
 package com.bmc.helloworldassessment.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.bmc.helloworldassessment.R;
+import com.bmc.helloworldassessment.misc.Constants;
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.utils.HttpRequestExecutor;
 import com.bmc.helloworldassessment.utils.Utils;
@@ -30,6 +33,8 @@ public class GetLocationsService extends IntentService {
     public static final String ACTION_CHECK = "com.bmc.helloworldassessment.action.CHECK";
 
     private HttpRequestExecutor mHttpExecutor;
+    private SharedPreferences mPrefs;
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
@@ -44,10 +49,12 @@ public class GetLocationsService extends IntentService {
             mHttpExecutor = new HttpRequestExecutor();
         }
 
+        mPrefs = getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+
+        Intent finishedIntent = new Intent(ACTION_CHECK_FINISHED);
+        ArrayList<Location> locations;
         if (Utils.isConnected(this)) {
             // User is connected so pull locations from json
-            Intent finishedIntent = new Intent(ACTION_CHECK_FINISHED);
-            ArrayList<Location> locations;
             try {
                 locations = getCurrentLocationsAndFillIntent(finishedIntent);
             } catch (IOException io) {
@@ -59,9 +66,16 @@ public class GetLocationsService extends IntentService {
                 sendBroadcast(finishedIntent);
                 return;
             }
+        } else {
+            // User is not connected, so attempt to extract from dB
+            locations = extractLocationsFromDbAndFillIntent(finishedIntent);
 
-            sendBroadcast(finishedIntent);
+            if (locations == null) {
+                sendBroadcast(finishedIntent);
+                return;
+            }
         }
+        sendBroadcast(finishedIntent);
     }
 
     // HttpRequestExecutor.abort() may cause network activity, which must not happen in the
@@ -114,6 +128,44 @@ public class GetLocationsService extends IntentService {
         return locations;
     }
 
+    private ArrayList<Location> extractLocationsFromDbAndFillIntent(Intent intent) {
+        String jsonString = mPrefs.getString(Constants.OFFICES, null);
+        ArrayList<Location> locations = new ArrayList<>();
+        try {
+            if (jsonString != null) {
+                JSONArray locationList = new JSONArray(jsonString);
+                int locationSize = locationList.length();
+
+                Log.d(TAG, "Got location list with " + locationSize + " entries from dB");
+
+                for (int i = 0; i < locationSize; i++) {
+                    if (mHttpExecutor.isAborted()) {
+                        Log.d(TAG, "ParseJson - HttpExecutor aborted");
+                        break;
+                    }
+                    if (locationList.isNull(i)) {
+                        continue;
+                    }
+                    JSONObject item = locationList.getJSONObject(i);
+                    Location location = parseLocationJSONObject(item);
+                    if (location != null) {
+                        locations.add(location);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error in json result from dB", e);
+        }
+
+        // Create a bundle to pass back to MapsActivity
+        Bundle extras = new Bundle();
+        extras.putSerializable("locations", locations);
+        extras.putInt("size", locations.size());
+
+        intent.putExtras(extras);
+        return locations;
+    }
+
     private ArrayList<Location> parseJSON(String jsonString) {
         ArrayList<Location> locations = new ArrayList<>();
         try {
@@ -135,9 +187,10 @@ public class GetLocationsService extends IntentService {
                     JSONObject item = locationList.getJSONObject(i);
                     Location location = parseLocationJSONObject(item);
                     if (location != null) {
-                        // TODO: Store locations for offline retrieval
                         locations.add(location);
                     }
+                    // Store the JSONArray to sharedPrefs for offline use
+                    mPrefs.edit().putString(Constants.OFFICES, locationList.toString()).apply();
                 }
             }
         }  catch (JSONException e) {
