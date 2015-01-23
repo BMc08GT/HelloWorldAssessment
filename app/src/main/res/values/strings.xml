@@ -6,5 +6,10 @@
     <string name="office_locations_title">Office locations</string>
     <string name="info_window_image_description">Map InfoWindow image content description</string>
     <string name="office_details_title">Office details</string>
+    <string name="about">About</string>
+    <string name="settings_oss">Open source libraries</string>
+    <string name="setup_about_title">Created by Brandon McAnsh</string>
+    <string name="setup_about_summary">HelloWorld\'s combination of technology power and agency services allows brands to motivate consumer behavior through promotions, loyalty, and CRM solutions. One holistic rich engagement platform gives you the flexibility to create something big (or little), always solid and secure, with 24/7 analytics.</string>
+    <string name="created_title">Created by Brandon McAnsh for assessment for HelloWorld with the open source libraries below.</string>
 
 </resources>

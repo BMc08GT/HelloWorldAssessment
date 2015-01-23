@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:id="@+id/title"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?android:attr/listPreferredItemHeight"
+            android:gravity="center_vertical"
+            android:paddingEnd="?android:attr/scrollbarSize"
+            android:paddingRight="?android:attr/scrollbarSize"
+            android:paddingTop="?android:attr/actionBarSize"
+            android:background="?android:attr/selectableItemBackground"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dip"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1">
+
+
+                <TextView
+                    android:id="@+id/about_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:enabled="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:text="@string/title_activity_maps"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:drawableTop="@drawable/ic_launcher"
+                    android:drawablePadding="0dp"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:id="@+id/about_summary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/about_title"
+                    style="@style/SettingsTextTitle"
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:enabled="false"
+                    android:text="@string/setup_about_summary"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View style="@style/Divider"
+            android:id="@+id/divider"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:id="@+id/created"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?android:attr/listPreferredItemHeight"
+            android:gravity="center_vertical"
+            android:paddingEnd="?android:attr/scrollbarSize"
+            android:paddingRight="?android:attr/scrollbarSize"
+            android:background="?android:attr/selectableItemBackground"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dip"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1">
+
+
+                <TextView
+                    android:id="@+id/created_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:enabled="false"
+                    style="@style/SettingsTextTitle"
+                    android:text="@string/created_title"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/category_oss"
+            style="@style/SettingsPageSummary"
+            android:text="@string/settings_oss" />
+
+        <View style="@style/Divider"
+            android:id="@+id/oss_divider"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/license_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="open_source_library_names">
+        <item>Ion</item>
+        <item>android-maps-utils</item>
+        <item>android-floating-action-button</item>
+    </string-array>
+
+    <string-array name="open_source_library_licenses">
+        <item>https://github.com/koush/ion/blob/master/README.md</item>
+        <item>https://github.com/googlemaps/android-maps-utils/blob/master/README.md</item>
+        <item>https://github.com/futuresimple/android-floating-action-button/blob/master/README.md</item>
+    </string-array>
+</resources>

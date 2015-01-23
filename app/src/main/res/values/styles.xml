@@ -35,6 +35,13 @@
         <item name="android:paddingLeft">16dp</item>
     </style>
 
+    <style name="SettingsTextTitle">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="Divider">
         <item name="android:id">@id/divider</item>
         <item name="android:layout_width">match_parent</item>
