@@ -22,8 +22,9 @@ public class GetImagesTask extends AsyncTask<ArrayList<Location>, Void, Void> {
         mContext = context;
     }
 
+    @SafeVarargs
     @Override
-    protected Void doInBackground(ArrayList<Location>... locations) {
+    protected final Void doInBackground(ArrayList<Location>... locations) {
 
         for (Location location : locations[0]) {
             SharedPreferences prefs = mContext.getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
