@@ -28,5 +28,4 @@ dependencies {
     compile 'com.koushikdutta.ion:ion:2.0.5'
     compile 'com.google.maps.android:android-maps-utils:0.3+'
     compile 'com.getbase:floatingactionbutton:1.1.0'
-    compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2'
 }

@@ -11,8 +11,14 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bmc.helloworldassessment.BaseActivity;
@@ -20,6 +26,7 @@ import com.bmc.helloworldassessment.R;
 import com.bmc.helloworldassessment.misc.Constants;
 import com.bmc.helloworldassessment.misc.Location;
 import com.bmc.helloworldassessment.utils.Utils;
+import com.bmc.helloworldassessment.view.NotifyScrollView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,7 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class OfficeDetailsActivity extends BaseActivity {
+public class OfficeDetailsActivity extends BaseActivity implements NotifyScrollView.Callback {
 
     private static final String TAG = OfficeDetailsActivity.class.getSimpleName();
 
@@ -40,6 +47,16 @@ public class OfficeDetailsActivity extends BaseActivity {
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private Location mOfficeLocation;
     private android.location.Location mLastLocation;
+
+    private NotifyScrollView mNotifyScrollView;
+
+    private FrameLayout mImageFrameLayout;
+    private ImageView mImageView;
+
+    private LinearLayout mContentLinearLayout;
+
+    private LinearLayout mToolbarLinearLayout;
+    private Toolbar mToolbar;
 
     private FloatingActionsMenu mFam;
     private boolean mFamExpanded = false;
@@ -52,7 +69,7 @@ public class OfficeDetailsActivity extends BaseActivity {
     public String getTitleResource() {
         // Set title to title_activity_maps here and
         // override the title in onCreate/onResume using mLocation.getName()
-        return "";
+        return mOfficeLocation.getName();
     }
 
     @Override
@@ -70,21 +87,63 @@ public class OfficeDetailsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         getLocationDetails();
         super.onCreate(savedInstanceState);
+
+        // view matching
+        mNotifyScrollView = (NotifyScrollView) findViewById(R.id.notify_scroll_view);
+
+        mImageFrameLayout = (FrameLayout) findViewById(R.id.image_frame_layout);
+        mImageView = (ImageView) findViewById(R.id.image_view);
+
+        mContentLinearLayout = (LinearLayout) findViewById(R.id.content_linear_layout);
+
+        mToolbarLinearLayout = (LinearLayout) findViewById(R.id.toolbar_linear_layout);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        setupNotifyScrollView();
         setupToolbar();
         setupCard();
         setupFabs();
         setUpMapIfNeeded();
     }
 
-    private void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setMinimumHeight(500);
+    private void setupNotifyScrollView() {
+        mNotifyScrollView.setCallback(this);
 
+        ViewTreeObserver viewTreeObserver = mNotifyScrollView.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    // get size
+                    int toolbarLinearLayoutHeight = mToolbarLinearLayout.getHeight();
+                    int imageHeight = mImageView.getHeight();
+
+                    // adjust image frame layout height
+                    ViewGroup.LayoutParams layoutParams = mImageFrameLayout.getLayoutParams();
+                    if (layoutParams.height != imageHeight) {
+                        layoutParams.height = imageHeight;
+                        mImageFrameLayout.setLayoutParams(layoutParams);
+                    }
+
+                    // adjust top margin of content linear layout
+                    ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mContentLinearLayout.getLayoutParams();
+                    if (marginLayoutParams.topMargin != toolbarLinearLayoutHeight + imageHeight) {
+                        marginLayoutParams.topMargin = toolbarLinearLayoutHeight + imageHeight;
+                        mContentLinearLayout.setLayoutParams(marginLayoutParams);
+                    }
+
+                    // call onScrollChanged to update initial properties.
+                    onScrollChanged(0, 0, 0, 0);
+                }
+            });
+        }
+    }
+
+    private void setupToolbar() {
         Bitmap bitmap = null;
         Drawable mActionBarBackgroundDrawable;
         if (!Utils.isConnected(this)) {
@@ -107,11 +166,7 @@ public class OfficeDetailsActivity extends BaseActivity {
             mActionBarBackgroundDrawable = new ColorDrawable(R.color.blue);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            toolbar.setBackground(mActionBarBackgroundDrawable);
-        } else {
-            toolbar.setBackgroundDrawable(mActionBarBackgroundDrawable);
-        }
+        mImageView.setImageDrawable(mActionBarBackgroundDrawable);
     }
 
     @SuppressLint("InflateParams")
@@ -215,5 +270,23 @@ public class OfficeDetailsActivity extends BaseActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onScrollChanged(int left, int top, int oldLeft, int oldTop) {
+        // get scroll y
+        int scrollY = mNotifyScrollView.getScrollY();
+
+        // calculate new y (for toolbar translation)
+        float newY = Math.max(mImageView.getHeight(), scrollY);
+
+        // translate toolbar linear layout and image frame layout
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            mToolbarLinearLayout.setTranslationY(newY);
+            mImageFrameLayout.setTranslationY(scrollY * 0.5f);
+        } else {
+            ViewCompat.setTranslationY(mToolbarLinearLayout, newY);
+            ViewCompat.setTranslationY(mImageFrameLayout, scrollY * 0.5f);
+        }
     }
 }

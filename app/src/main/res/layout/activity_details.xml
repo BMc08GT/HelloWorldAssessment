@@ -1,72 +1,104 @@
-<RelativeLayout
+<com.bmc.helloworldassessment.view.NotifyScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/notify_scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <include android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
-
-        <include
-            android:id="@+id/map"
-            android:layout_height="match_parent"
-            android:layout_width="fill_parent"
-            android:layout_weight="1"
-            layout="@layout/map_detail_fragment" />
-
-        <TextView
-            android:id="@+id/header"
-            style="@style/SettingsPageSummary"
-            android:text="@string/office_details_title" />
-
-        <View style="@style/Divider"
-            android:id="@+id/response_divider"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"/>
-
-        <include
-            android:id="@+id/card"
-            android:layout_height="match_parent"
+        <!-- Image Layout -->
+        <FrameLayout
+            android:id="@+id/image_frame_layout"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            layout="@layout/office_details_item" />
-    </LinearLayout>
+            android:layout_height="wrap_content">
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/fabs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        fab:fab_addButtonColorNormal="@color/pewter"
-        fab:fab_addButtonColorPressed="@color/grey"
-        fab:fab_addButtonPlusIconColor="@color/white"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp">
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/call"
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/app_name" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/content_linear_layout"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/map"
+                android:layout_height="400dp"
+                android:layout_width="fill_parent"
+                layout="@layout/map_detail_fragment" />
+
+            <TextView
+                android:id="@+id/header"
+                style="@style/SettingsPageSummary"
+                android:text="@string/office_details_title" />
+
+            <View style="@style/Divider"
+                android:id="@+id/response_divider"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <include
+                android:id="@+id/card"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="16dp"
+                layout="@layout/office_details_item" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/toolbar_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:background="@color/blue">
+
+            <include android:id="@+id/toolbar"
+                layout="@layout/toolbar" />
+
+        </LinearLayout>
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/fabs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/blue"
-            fab:fab_colorPressed="@color/blue_dark"
-            fab:fab_icon="@drawable/ic_phone_white"/>
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/navigate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/orange"
-            fab:fab_colorPressed="@color/orange_dark"
-            fab:fab_icon="@drawable/ic_directions"/>
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            fab:fab_addButtonColorNormal="@color/pewter"
+            fab:fab_addButtonColorPressed="@color/grey"
+            fab:fab_addButtonPlusIconColor="@color/white"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp">
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/blue"
+                fab:fab_colorPressed="@color/blue_dark"
+                fab:fab_icon="@drawable/ic_phone_white"/>
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/navigate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/orange"
+                fab:fab_colorPressed="@color/orange_dark"
+                fab:fab_icon="@drawable/ic_directions"/>
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-</RelativeLayout>
+    </RelativeLayout>
+</com.bmc.helloworldassessment.view.NotifyScrollView>
 
